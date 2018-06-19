@@ -1,6 +1,11 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 from oceandb_driver_interface.oceandb import OceanDb
 
-mongo = OceanDb('./oceandb.ini').plugin
+
+
+mongo = OceanDb('/home/eruiz/Projects/oceandb-mongodb-driver/tests/oceandb.ini').plugin
 
 def test_plugin_type_is_mongodb():
     assert mongo.type == 'MongoDB'
