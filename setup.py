@@ -11,7 +11,7 @@ with open('README.rst') as readme_file:
 with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
-requirements = ['oceandb-driver-interface==0.1.1', ]
+requirements = ['oceandb-driver-interface==0.0.1', ]
 
 setup_requirements = ['pytest-runner', ]
 
