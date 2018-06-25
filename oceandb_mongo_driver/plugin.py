@@ -39,3 +39,5 @@ class Plugin(AbstractPlugin):
     def list(self, search_from=None, search_to=None, offset=None, limit=None):
         return self.driver.instance.find()
 
+    def query(self, query_string):
+        return self.driver.instance.find(query_string)

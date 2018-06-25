@@ -26,10 +26,10 @@ script: tox
 deploy:
   provider: pypi
   distributions: sdist bdist_wheel
-  user: oceanprotocol
+  user: leucothia
   password:
-    secure: PLEASE_REPLACE_ME
+    secure: "Y3yyh7AVbyzivokv7uBc0XsdvMggOE/IveAawJHJ806ZDAhi54PsSpEOfXVpQuklj9XOQMOMzBM5GhdnsBMqrTd5lHCHFbnWctgYIrknxM63v3U0Ehp9/QooTJbP0Zn7I8nGdFWg2gPrc6lx2/y1uDfQJYirHVWXrxrrv0OimjCBSGha1NPIsZPWzSCXLbK3cIG9Xo1VhwP5zmz890Kq3S5oC50uUJUetJ2CMNSkh5e8X9VbSRRKlugNpuLiLytXzl70BLRt96VuEnBUENCg+EqvwZ0SCqHEvi/eZQo0NDds5I4jwI0MU8pHquY4f1ZFHvIphyTAI9sDfDtxLIzCqgE5iutF4fEKUJ6hrSDHmugZjCAA6WfTTcmYYe0B7WGjVpiS8Lirn5h2W9Na1xHJk2jZwh3IHHWYiNOFPAFIA5e/5Ttpntp2+x82LSogFYAaGTeGOmlXg2cg5ULvRf83CkcpFsMihI3Zz6TTGebNuRQoZUrUpORVARQVvWF6RTFbSUGletsnaj4IHKUfMgKYi3x5lcCDsCU5giz5nDBykFWhY7WbH7mcH7w76fejF74T1GFyoP+yqeyoLFmPlqLRqb2npHVp5K4xYS7oAk65FyapYeYT6WXgcwCCeN9oG4nidBz7+7mDVDqfZ6IYZqA5t61jpLnF+b4fw6X8t93Woo0="
   on:
     tags: true
-    repo: oceanprotocol/oceandb_mongo_driver
+    repo: oceanprotocol/oceandb_mongodb_driver
     python: 3.6

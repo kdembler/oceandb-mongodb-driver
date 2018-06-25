@@ -16,15 +16,15 @@ class MongoInstance(object):
     def __init__(self, config):
         host = config['db.hostname']
         port = int(config['db.port'])
-        username = config['db.username']
-        password = config['db.password']
         db_name = config['db.name']
         collection = config['db.collection']
 
-        print('username/password: %s, %s' % (username, password))
         self._client = MongoClient(host=host, port=port)
         self._db = self._client[db_name]
-        if 'db.name' in config and 'db.password' in config:
+        if 'db.username' in config and 'db.password' in config:
+            username = config['db.username']
+            password = config['db.password']
+            print('username/password: %s, %s' % (username, password))
             self._db.authenticate(name=username, password=password)
 
         self._collection = self._db[collection]

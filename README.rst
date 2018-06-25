@@ -3,25 +3,24 @@ oceandb-mogodb-driver
 =====================
 
 
-.. image:: https://img.shields.io/pypi/v/oceandb-mongo-driver.svg
-        :target: https://pypi.python.org/pypi/oceandb-mongo-driver
+.. image:: https://img.shields.io/pypi/v/oceandb-mongodb-driver.svg
+        :target: https://pypi.python.org/pypi/oceandb-mongodb-driver
 
-.. image:: https://img.shields.io/travis/oceanprotocol/oceandb-mongo-driver.svg
-        :target: https://travis-ci.org/oceanprotocol/oceandb-mongo-driver
+.. image:: https://img.shields.io/travis/oceanprotocol/oceandb-mongodb-driver.svg
+        :target: https://travis-ci.com/oceanprotocol/oceandb-mongodb-driver
 
 .. image:: https://readthedocs.org/projects/oceandb-plugin-system/badge/?version=latest
         :target: https://oceandb-plugin-system.readthedocs.io/en/latest/?badge=latest
         :alt: Documentation Status
 
 
-.. image:: https://pyup.io/repos/github/oceanprotocol/oceandb-mongo-driver/shield.svg
-     :target: https://pyup.io/repos/github/oceanprotocol/oceandb-mongo-driver/
+.. image:: https://pyup.io/repos/github/oceanprotocol/oceandb-mongodb-driver/shield.svg
+     :target: https://pyup.io/repos/github/oceanprotocol/oceandb-mongodb-driver/
      :alt: Updates
 
 
 
-Python Boilerplate contains all the boilerplate you need to create a Python package.
-
+MongoDB driver to connect implementing OceanDB.
 
 * Free software: Apache Software License 2.0
 * Documentation: https://oceandb-plugin-system.readthedocs.io.
@@ -67,24 +66,3 @@ Once you have defined this the only thing that you have to do it is use it:
     oceandb.write({"id": 1, "value": "test"})
 
 ..
-
-How to develop a plugin
------------------------
-
-To create a plugin you have to create a class called Plugin extending AbstractPlugin.
-
-You could find an example in plugins/mongo
-
-
-Features
---------
-
-* TODO
-
-Credits
--------
-
-This package was created with Cookiecutter_ and the `audreyr/cookiecutter-pypackage`_ project template.
-
-.. _Cookiecutter: https://github.com/audreyr/cookiecutter
-.. _`audreyr/cookiecutter-pypackage`: https://github.com/audreyr/cookiecutter-pypackage

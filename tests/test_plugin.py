@@ -34,3 +34,8 @@ def test_plugin_list():
     mongo.delete(1)
     mongo.delete(2)
     mongo.delete(3)
+
+def test_plugin_query():
+    mongo.write({"id": 1, 'example': 'mongo'})
+    assert mongo.query({'example': 'mongo'})[0]['example'] == "mongo"
+    mongo.delete(1)
