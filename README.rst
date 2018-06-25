@@ -1,6 +1,19 @@
-=====================
-oceandb-mogodb-driver
-=====================
+|banner|
+
+.. raw:: html
+
+   <h1 align="center">
+
+oceandb-mongodb-driver
+
+.. raw:: html
+
+   </h1>
+
+..
+
+    🐳 Mongo DB BigchainDB driver (Python).
+
 
 
 .. image:: https://img.shields.io/pypi/v/oceandb-mongodb-driver.svg
