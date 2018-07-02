@@ -38,8 +38,8 @@ and "help wanted" is open to whoever wants to implement it.
 Write Documentation
 ~~~~~~~~~~~~~~~~~~~
 
-oceandb-plugin-system could always use more documentation, whether as part of the
-official oceandb-plugin-system docs, in docstrings, or even on the web in blog posts,
+oceandb-mongodb-driver could always use more documentation, whether as part of the
+official oceandb-mongodb-driver docs, in docstrings, or even on the web in blog posts,
 articles, and such.
 
 Submit Feedback

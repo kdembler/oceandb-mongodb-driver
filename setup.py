@@ -5,13 +5,13 @@
 
 from setuptools import setup, find_packages
 
-with open('README.rst') as readme_file:
+with open('README.rst', encoding='utf-8') as readme_file:
     readme = readme_file.read()
 
-with open('HISTORY.rst') as history_file:
+with open('HISTORY.rst', encoding='utf-8') as history_file:
     history = history_file.read()
 
-requirements = ['oceandb-driver-interface==0.0.1', ]
+requirements = ['oceandb-driver-interface', ]
 
 setup_requirements = ['pytest-runner', ]
 
@@ -29,10 +29,11 @@ setup(
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
     ],
-    description="Python Boilerplate contains all the boilerplate you need to create a Python package.",
+    description="🐳 Mongo DB BigchainDB driver (Python).",
     install_requires=requirements,
     license="Apache Software License 2.0",
-    long_description=readme + '\n\n' + history,
+    long_description=readme,
+    long_description_content_type='text/x-rst',
     include_package_data=True,
     keywords='oceandb_mongo_driver',
     name='oceandb_mongo_driver',
