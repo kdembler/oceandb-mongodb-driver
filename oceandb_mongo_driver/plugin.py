@@ -24,17 +24,21 @@ class Plugin(AbstractPlugin):
         return 'MongoDB'
 
     def write(self, obj):
-        return self.driver.instance.insert_one(obj)
+        o = self.driver.instance.insert_one(obj)
+        print('mongo::write::{}'.format(o.inserted_id))
+        return o.inserted_id
 
     def read(self, id):
-        return self.driver.instance.find_one({"id": id})
+        return self.driver.instance.find_one({"_id": id})
 
     def update(self, id, obj):
         prev = self.read(id)
+        print('mongo::update::{}'.format(id))
         return self.driver.instance.replace_one(prev, obj)
 
     def delete(self, id):
-        return self.driver.instance.delete_one({"id": id})
+        print('mongo::delete::{}'.format(id))
+        return self.driver.instance.delete_one({"_id": id})
 
     def list(self, search_from=None, search_to=None, offset=None, limit=None):
         return self.driver.instance.find()
