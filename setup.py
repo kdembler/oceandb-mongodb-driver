@@ -11,7 +11,7 @@ with open('README.rst', encoding='utf-8') as readme_file:
 with open('HISTORY.rst', encoding='utf-8') as history_file:
     history = history_file.read()
 
-requirements = ['oceandb-driver-interface', ]
+requirements = ['oceandb-driver-interface', 'pymongo', ]
 
 setup_requirements = ['pytest-runner', ]
 
@@ -35,13 +35,13 @@ setup(
     long_description=readme,
     long_description_content_type='text/x-rst',
     include_package_data=True,
-    keywords='oceandb_mongo_driver',
-    name='oceandb_mongo_driver',
-    packages=find_packages(include=['oceandb_mongo_driver']),
+    keywords='oceandb-mongodb-driver',
+    name='oceandb-mongodb-driver',
+    packages=find_packages(include=['oceandb_mongodb_driver']),
     setup_requires=setup_requirements,
     test_suite='tests',
     tests_require=test_requirements,
-    url='https://github.com/oceanprotocol/oceandb-mongo-driver',
+    url='https://github.com/oceanprotocol/oceandb-mongodb-driver',
     version='0.0.1',
     zip_safe=False,
 )

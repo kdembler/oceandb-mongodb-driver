@@ -1,6 +1,6 @@
 """Implementation of OceanDB plugin based in MongoDB"""
 from oceandb_driver_interface.plugin import AbstractPlugin
-from oceandb_mongo_driver.instance import get_database_instance
+from oceandb_mongodb_driver.instance import get_database_instance
 
 
 class Plugin(AbstractPlugin):
