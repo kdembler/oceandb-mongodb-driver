@@ -11,31 +11,32 @@ def test_plugin_type_is_mongodb():
 
 
 def test_plugin_write_and_read():
-    object_id = mongo.write({"id": 1, "value": "test"})
-    assert mongo.read(object_id)['id'] == 1
-    assert mongo.read(object_id)['value'] == 'test'
-    mongo.delete(object_id)
+    did = 'did:ocn-asset:0x123456789abcdefghi#path1'
+    mongo.write({"value": "test"}, did)
+    assert mongo.read(did)['_id'] == did
+    assert mongo.read(did)['value'] == 'test'
+    mongo.delete(did)
 
 
 def test_update():
-    object_id = mongo.write({"id": 1, "value": "test"})
-    assert mongo.read(object_id)['value'] == 'test'
-    mongo.update(object_id, {"id": 1, "value": "testUpdated"})
-    assert mongo.read(object_id)['value'] == 'testUpdated'
-    mongo.delete(object_id)
+    mongo.write({"value": "test"}, 1)
+    assert mongo.read(1)['value'] == 'test'
+    mongo.update({"value": "testUpdated"}, 1)
+    assert mongo.read(1)['value'] == 'testUpdated'
+    mongo.delete(1)
 
 
 def test_plugin_list():
-    object_id1=mongo.write({"id": 1, "value": "test1"})
-    object_id2=mongo.write({"id": 2, "value": "test2"})
-    object_id3=mongo.write({"id": 3, "value": "test3"})
+    mongo.write({"value": "test1"}, 1)
+    mongo.write({"value": "test2"}, 2)
+    mongo.write({"value": "test3"}, 3)
     assert mongo.list().count() == 3
     assert mongo.list()[0]['value'] == 'test1'
-    mongo.delete(object_id1)
-    mongo.delete(object_id2)
-    mongo.delete(object_id3)
+    mongo.delete(1)
+    mongo.delete(2)
+    mongo.delete(3)
 
 def test_plugin_query():
-    object_id=mongo.write({"id": 1, 'example': 'mongo'})
+    mongo.write({'example': 'mongo'}, 1)
     assert mongo.query({'example': 'mongo'})[0]['example'] == "mongo"
-    mongo.delete(object_id)
+    mongo.delete(1)
