@@ -1,7 +1,7 @@
 """Implementation of OceanDB plugin based in MongoDB"""
 from oceandb_driver_interface.plugin import AbstractPlugin
 from oceandb_mongodb_driver.instance import get_database_instance
-
+import logging
 
 class Plugin(AbstractPlugin):
     """Mongo ledger plugin for `Ocean DB's Python reference
@@ -17,28 +17,32 @@ class Plugin(AbstractPlugin):
                 connect to as the persistence layer
         """
         self.driver = get_database_instance(config)
+        self.logger = logging.getLogger('Plugin')
+        logging.basicConfig(level=logging.INFO)
 
     @property
     def type(self):
         """str: the type of this plugin (``'MongoDB'``)"""
         return 'MongoDB'
 
-    def write(self, obj):
+    def write(self, obj, resource_id=None):
+        if resource_id is not None:
+            obj['_id'] = resource_id
         o = self.driver.instance.insert_one(obj)
-        print('mongo::write::{}'.format(o.inserted_id))
+        self.logger.debug('mongo::write::{}'.format(o.inserted_id))
         return o.inserted_id
 
-    def read(self, id):
-        return self.driver.instance.find_one({"_id": id})
+    def read(self, resource_id):
+        return self.driver.instance.find_one({"_id": resource_id})
 
-    def update(self, id, obj):
-        prev = self.read(id)
-        print('mongo::update::{}'.format(id))
+    def update(self, obj, resource_id):
+        prev = self.read(resource_id)
+        self.logger.debug('mongo::update::{}'.format(resource_id))
         return self.driver.instance.replace_one(prev, obj)
 
-    def delete(self, id):
-        print('mongo::delete::{}'.format(id))
-        return self.driver.instance.delete_one({"_id": id})
+    def delete(self, resource_id):
+        self.logger.debug('mongo::delete::{}'.format(resource_id))
+        return self.driver.instance.delete_one({"_id": resource_id})
 
     def list(self, search_from=None, search_to=None, offset=None, limit=None):
         return self.driver.instance.find()
