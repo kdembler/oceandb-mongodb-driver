@@ -66,7 +66,7 @@ Once you have defined this the only thing that you have to do it is use it:
 ```python
 
     oceandb = OceanDb(conf)
-    oceandb.write({"id": 1, "value": "test"})
+    oceandb.write({"value": "test"}, id)
 
 ```
 
