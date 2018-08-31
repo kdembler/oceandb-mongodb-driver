@@ -17,6 +17,7 @@
   - [Features](#features)
   - [Prerequisites](#prerequisites)
   - [Quickstart](#quickstart)
+  - [Environment variables](#environment-variables)
   - [Code style](#code-style)
   - [Testing](#testing)
   - [New Version](#new-version)
@@ -71,6 +72,18 @@ Once you have defined this the only thing that you have to do it is use it:
 
 ```
 
+## Environment variables
+
+When you want to instantiate an Oceandb plugin you can provide the next environment variables:
+
+- **$CONFIG_PATH** 
+- **$MODULE** 
+- **$DB_HOSTNAME** 
+- **$DB_PORT**
+- **$DB_NAME**
+- **$DB_COLLECTION**
+- **$DB_USERNAME**
+- **$DB_PASSWORD**
 
 ## Code style
 

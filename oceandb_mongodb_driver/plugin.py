@@ -10,7 +10,7 @@ class Plugin(AbstractPlugin):
     related actions.
     """
 
-    def __init__(self, config):
+    def __init__(self, config=None):
         """Initialize a :class:`~.Plugin` instance and connect to MongoDB.
         Args:
             *nodes (str): One or more URLs of MongoDB nodes to
