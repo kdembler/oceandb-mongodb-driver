@@ -17,8 +17,10 @@
   - [Features](#features)
   - [Prerequisites](#prerequisites)
   - [Quickstart](#quickstart)
+  - [Environment variables](#environment-variables)
   - [Code style](#code-style)
   - [Testing](#testing)
+  - [New Version](#new-version)
   - [License](#license)
 
 ---
@@ -70,6 +72,18 @@ Once you have defined this the only thing that you have to do it is use it:
 
 ```
 
+## Environment variables
+
+When you want to instantiate an Oceandb plugin you can provide the next environment variables:
+
+- **$CONFIG_PATH** 
+- **$MODULE** 
+- **$DB_HOSTNAME** 
+- **$DB_PORT**
+- **$DB_NAME**
+- **$DB_COLLECTION**
+- **$DB_USERNAME**
+- **$DB_PASSWORD**
 
 ## Code style
 
@@ -81,6 +95,9 @@ and [python-style-guide](https://github.com/oceanprotocol/dev-ocean/blob/master/
 Automatic tests are setup via Travis, executing `tox`.
 Our test use pytest framework.
 
+## New Version
+
+The `bumpversion.sh` script helps to bump the project version. You can execute the script using as first argument {major|minor|patch} to bump accordingly the version.
 
 ## License
 
