@@ -3,7 +3,7 @@
 
 from oceandb_driver_interface.oceandb import OceanDb
 
-mongo = OceanDb('./tests/oceandb.ini').plugin
+mongo = OceanDb('./tests/oceandb.ini').plugin()
 
 
 def test_plugin_type_is_mongodb():
