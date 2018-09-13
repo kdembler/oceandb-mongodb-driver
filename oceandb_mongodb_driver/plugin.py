@@ -3,6 +3,7 @@ from oceandb_driver_interface.plugin import AbstractPlugin
 from oceandb_mongodb_driver.instance import get_database_instance
 import logging
 
+
 class Plugin(AbstractPlugin):
     """Mongo ledger plugin for `Ocean DB's Python reference
     implementation <https://github.com/oceanprotocol/oceandb-mongo-driver>`_.
