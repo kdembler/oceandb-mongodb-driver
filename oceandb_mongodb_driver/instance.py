@@ -20,7 +20,8 @@ class MongoInstance(object):
         collection = get_value('db.collection', 'DB_COLLECTION', 'collection_name', config)
         username = get_value('db.username', 'DB_USERNAME', None, config)
         password = get_value('db.password', 'DB_PASSWORD', None, config)
-        self._client = MongoClient(host=host, port=port)
+        ssl = get_value('db.ssl', 'DB_SSL', False, config)
+        self._client = MongoClient(host=host, port=port, ssl=ssl)
         self._db = self._client[db_name]
         if username is not None and password is not None:
             print('username/password: %s, %s' % (username, password))
