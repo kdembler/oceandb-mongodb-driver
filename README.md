@@ -54,7 +54,8 @@ In the configuration we are going to specify the following parameters to
     module=mongodb          # You can use one the plugins already created. Currently we have mongodb and bigchaindb.
     module.path=            # You can specify the location of your custom plugin.
     db.hostname=localhost   # Address of your MongoDB.
-    db.port=27017            # Port of your Mongodb.
+    db.port=27017           # Port of your Mongodb.
+    db.ssl=false            # In order to use HTTPS, set ssl to true else set it to false.
 
     db.username=user        # If you are using authentication, mongodb username.
     db.password=password    # If you are using authentication, mongodb password.
