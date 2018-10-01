@@ -25,15 +25,15 @@ class MongoInstance(object):
         password = get_value('db.password', 'DB_PASSWORD', None, config)
 
         ssl = get_value('db.ssl', 'DB_SSL', False, config)
-        verify_certs = get_value('db.verifyCerts', 'DB_VERIFY_CERTS', False, config)
+        verify_certs = get_value('db.verify_certs', 'DB_VERIFY_CERTS', False, config)
         if verify_certs is False:
             ssl_cert_reqs = CERT_NONE
         else:
             ssl_cert_reqs = CERT_REQUIRED
 
-        ca_cert_path = get_value('db.caCertPath', 'DB_CA_CERT_PATH', None, config)
-        client_key = get_value('db.clientKey', 'DB_CLIENT_KEY', None, config)
-        client_cert_path = get_value('db.clientCertPath', 'DB_CLIENT_CERT_PATH', None, config)
+        ca_cert_path = get_value('db.ca_cert_path', 'DB_CA_CERT_PATH', None, config)
+        client_key = get_value('db.client_key', 'DB_CLIENT_KEY', None, config)
+        client_cert_path = get_value('db.client_cert_path', 'DB_CLIENT_CERT_PATH', None, config)
 
         self._client = MongoClient(host=host,
                                    port=port,

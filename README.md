@@ -57,10 +57,10 @@ In the configuration we are going to specify the following parameters to
     db.port=27017           # Port of your Mongodb.
     
     db.ssl=True             # If True, connections will be made using HTTPS, else using HTTP
-    db.verifyCerts=False    # If True, CA certificate will be verified
-    db.caCertPath=          # If verifyCerts is True, then path to the CA cert should be provided here
-    db.clientKey=           # If db server needs client verification, then provide path to your client key
-    db.clientCertPath=      # If db server needs client verification, then provide path to your client certificate
+    db.verify_certs=False    # If True, CA certificate will be verified
+    db.ca_cert_path=          # If verifyCerts is True, then path to the CA cert should be provided here
+    db.client_key=           # If db server needs client verification, then provide path to your client key
+    db.client_cert_path=      # If db server needs client verification, then provide path to your client certificate
    
     db.username=user        # If you are using authentication, mongodb username.
     db.password=password    # If you are using authentication, mongodb password.
