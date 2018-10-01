@@ -1,4 +1,4 @@
-from pymongo import MongoClient
+from pymongo import MongoClient, TEXT
 from oceandb_driver_interface.utils import get_value
 _DB_INSTANCE = None
 
@@ -27,6 +27,7 @@ class MongoInstance(object):
             self._db.authenticate(name=username, password=password)
 
         self._collection = self._db[collection]
+        self._collection.create_index([("$**", TEXT)])
 
     @property
     def instance(self):
