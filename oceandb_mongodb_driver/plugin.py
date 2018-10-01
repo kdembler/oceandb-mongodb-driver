@@ -1,7 +1,9 @@
 """Implementation of OceanDB plugin based in MongoDB"""
-from oceandb_driver_interface.plugin import AbstractPlugin
-from oceandb_mongodb_driver.instance import get_database_instance
 import logging
+
+from oceandb_driver_interface.plugin import AbstractPlugin
+
+from oceandb_mongodb_driver.instance import get_database_instance
 
 
 class Plugin(AbstractPlugin):
@@ -45,8 +47,12 @@ class Plugin(AbstractPlugin):
         self.logger.debug('mongo::delete::{}'.format(resource_id))
         return self.driver.instance.delete_one({"_id": resource_id})
 
-    def list(self, search_from=None, search_to=None, offset=None, limit=None):
-        return self.driver.instance.find()
+    def list(self, search_from=None, search_to=None, limit=0):
+        return self.driver.instance.find().limit(limit)
 
     def query(self, query_string):
         return self.driver.instance.find(query_string)
+
+    def text_query(self, text, key_or_list, direction=1, offset=100, page=0):
+        return self.driver.instance.find({"$text": {"$search": text}}).sort(key_or_list, direction).skip(page*offset) \
+            .limit(offset)
