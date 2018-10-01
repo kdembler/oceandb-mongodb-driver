@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from oceandb_driver_interface.oceandb import OceanDb
+from oceandb_driver_interface.search_model import QueryModel, FullTextModel
 
 mongo = OceanDb('./tests/oceandb.ini').plugin
 
@@ -39,7 +40,8 @@ def test_plugin_list():
 
 def test_plugin_query():
     mongo.write({'example': 'mongo'}, 1)
-    assert mongo.query({'example': 'mongo'})[0]['example'] == 'mongo'
+    search_model = QueryModel({'example': 'mongo'}, [('example', -1)])
+    assert mongo.query(search_model)[0]['example'] == 'mongo'
     mongo.delete(1)
 
 
@@ -48,10 +50,12 @@ def test_plugin_query_text():
     mongo.write({'key': 'B', 'value': 'test second'}, 2)
     mongo.write({'key': 'C', 'value': 'test third'}, 3)
     mongo.write({'key': 'D', 'value': 'test fourth'}, 4)
-    assert mongo.text_query('test', 'key', -1, 3, 0).count(with_limit_and_skip=True) == 3
-    assert mongo.text_query('test', 'key', -1, 3, 0)[0]['key'] == 'D'
-    assert mongo.text_query('test', 'key', -1, 3, 0)[1]['key'] == 'C'
-    assert mongo.text_query('test', 'key', -1, 2, 1)[0]['key'] == 'B'
+    search_model = FullTextModel('test', [('key', -1)], offset=3, page=0)
+    search_model1 = FullTextModel('test', [('key', -1)], offset=3, page=1)
+    assert mongo.text_query(search_model).count(with_limit_and_skip=True) == 3
+    assert mongo.text_query(search_model)[0]['key'] == 'D'
+    assert mongo.text_query(search_model)[1]['key'] == 'C'
+    assert mongo.text_query(search_model1)[0]['key'] == 'A'
     mongo.delete(1)
     mongo.delete(2)
     mongo.delete(3)

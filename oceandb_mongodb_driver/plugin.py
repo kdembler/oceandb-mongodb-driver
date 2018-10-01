@@ -50,9 +50,23 @@ class Plugin(AbstractPlugin):
     def list(self, search_from=None, search_to=None, limit=0):
         return self.driver.instance.find().limit(limit)
 
-    def query(self, query_string):
-        return self.driver.instance.find(query_string)
+    def query(self, search_model):
+        if search_model.sort is None:
+            return self.driver.instance.find(search_model.query).skip(
+                search_model.page * search_model.offset) \
+                .limit(search_model.offset)
+        else:
+            return self.driver.instance.find(search_model.query).sort(
+                search_model.sort).skip(
+                search_model.page * search_model.offset) \
+                .limit(search_model.offset)
 
-    def text_query(self, text, key_or_list, direction=1, offset=100, page=0):
-        return self.driver.instance.find({"$text": {"$search": text}}).sort(key_or_list, direction).skip(page*offset) \
-            .limit(offset)
+    def text_query(self, full_text_model):
+        if full_text_model.sort is None:
+            return self.driver.instance.find({"$text": {"$search": full_text_model.text}})\
+                .skip(full_text_model.page * full_text_model.offset) \
+                .limit(full_text_model.offset)
+        else:
+            return self.driver.instance.find({"$text": {"$search": full_text_model.text}}).sort(
+                full_text_model.sort).skip(full_text_model.page * full_text_model.offset) \
+                .limit(full_text_model.offset)
