@@ -1,5 +1,8 @@
-from pymongo import MongoClient, TEXT
+from ssl import CERT_NONE, CERT_REQUIRED
+
 from oceandb_driver_interface.utils import get_value
+from pymongo import MongoClient, TEXT
+
 _DB_INSTANCE = None
 
 
@@ -20,7 +23,25 @@ class MongoInstance(object):
         collection = get_value('db.collection', 'DB_COLLECTION', 'collection_name', config)
         username = get_value('db.username', 'DB_USERNAME', None, config)
         password = get_value('db.password', 'DB_PASSWORD', None, config)
-        self._client = MongoClient(host=host, port=port)
+
+        ssl = get_value('db.ssl', 'DB_SSL', False, config)
+        verify_certs = get_value('db.verifyCerts', 'DB_VERIFY_CERTS', False, config)
+        if verify_certs is False:
+            ssl_cert_reqs = CERT_NONE
+        else:
+            ssl_cert_reqs = CERT_REQUIRED
+
+        ca_cert_path = get_value('db.caCertPath', 'DB_CA_CERT_PATH', None, config)
+        client_key = get_value('db.clientKey', 'DB_CLIENT_KEY', None, config)
+        client_cert_path = get_value('db.clientCertPath', 'DB_CLIENT_CERT_PATH', None, config)
+
+        self._client = MongoClient(host=host,
+                                   port=port,
+                                   ssl=ssl,
+                                   ssl_cert_reqs=ssl_cert_reqs,
+                                   ssl_ca_certs=ca_cert_path,
+                                   ssl_certfile=client_cert_path,
+                                   ssl_keyfile=client_key)
         self._db = self._client[db_name]
         if username is not None and password is not None:
             print('username/password: %s, %s' % (username, password))

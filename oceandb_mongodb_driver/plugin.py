@@ -47,7 +47,7 @@ class Plugin(AbstractPlugin):
         self.logger.debug('mongo::delete::{}'.format(resource_id))
         return self.driver.instance.delete_one({"_id": resource_id})
 
-    def list(self, search_from=None, search_to=None, limit=None):
+    def list(self, search_from=None, search_to=None, limit=0):
         return self.driver.instance.find().limit(limit)
 
     def query(self, query_string):
