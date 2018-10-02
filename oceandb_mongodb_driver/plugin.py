@@ -4,6 +4,7 @@ import logging
 from oceandb_driver_interface.plugin import AbstractPlugin
 
 from oceandb_mongodb_driver.instance import get_database_instance
+from oceandb_driver_interface.search_model import FullTextModel, QueryModel
 
 
 class Plugin(AbstractPlugin):
@@ -50,7 +51,7 @@ class Plugin(AbstractPlugin):
     def list(self, search_from=None, search_to=None, limit=0):
         return self.driver.instance.find().limit(limit)
 
-    def query(self, search_model):
+    def query(self, search_model: QueryModel):
         if search_model.sort is None:
             return self.driver.instance.find(search_model.query).skip(
                 search_model.page * search_model.offset) \
@@ -61,7 +62,7 @@ class Plugin(AbstractPlugin):
                 search_model.page * search_model.offset) \
                 .limit(search_model.offset)
 
-    def text_query(self, full_text_model):
+    def text_query(self, full_text_model: FullTextModel):
         if full_text_model.sort is None:
             return self.driver.instance.find({"$text": {"$search": full_text_model.text}})\
                 .skip(full_text_model.page * full_text_model.offset) \
