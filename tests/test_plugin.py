@@ -40,7 +40,7 @@ def test_plugin_list():
 
 def test_plugin_query():
     mongo.write({'example': 'mongo'}, 1)
-    search_model = QueryModel({'example': 'mongo'}, [('example', -1)])
+    search_model = QueryModel({'example': 'mongo'}, {'example': -1})
     assert mongo.query(search_model)[0]['example'] == 'mongo'
     mongo.delete(1)
 
@@ -50,8 +50,8 @@ def test_plugin_query_text():
     mongo.write({'key': 'B', 'value': 'test second'}, 2)
     mongo.write({'key': 'C', 'value': 'test third'}, 3)
     mongo.write({'key': 'D', 'value': 'test fourth'}, 4)
-    search_model = FullTextModel('test', [('key', -1)], offset=3, page=0)
-    search_model1 = FullTextModel('test', [('key', -1)], offset=3, page=1)
+    search_model = FullTextModel('test', {'key': -1}, offset=3, page=0)
+    search_model1 = FullTextModel('test', {'key': -1}, offset=3, page=1)
     assert mongo.text_query(search_model).count(with_limit_and_skip=True) == 3
     assert mongo.text_query(search_model)[0]['key'] == 'D'
     assert mongo.text_query(search_model)[1]['key'] == 'C'
