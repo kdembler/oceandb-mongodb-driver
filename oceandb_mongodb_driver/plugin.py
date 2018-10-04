@@ -58,7 +58,7 @@ class Plugin(AbstractPlugin):
                 .limit(search_model.offset)
         else:
             return self.driver.instance.find(search_model.query).sort(
-                search_model.sort).skip(
+                list(search_model.sort.items())).skip(
                 search_model.page * search_model.offset) \
                 .limit(search_model.offset)
 
@@ -69,5 +69,5 @@ class Plugin(AbstractPlugin):
                 .limit(full_text_model.offset)
         else:
             return self.driver.instance.find({"$text": {"$search": full_text_model.text}}).sort(
-                full_text_model.sort).skip(full_text_model.page * full_text_model.offset) \
+                list(full_text_model.sort.items())).skip(full_text_model.page * full_text_model.offset) \
                 .limit(full_text_model.offset)

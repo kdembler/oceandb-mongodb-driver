@@ -91,6 +91,12 @@ When you want to instantiate an Oceandb plugin you can provide the next environm
 - **$DB_USERNAME**
 - **$DB_PASSWORD**
 
+
+## About queries
+
+If you are going to do queries in mongoDB and you want to be efficient you should be aware of [create an index](https://docs.mongodb.com/manual/reference/method/db.collection.createIndex/) for
+the fields that you want to sort.
+
 ## Code style
 
 The information about code style in python is documented in this two links [python-developer-guide](https://github.com/oceanprotocol/dev-ocean/blob/master/doc/development/python-developer-guide.md)
