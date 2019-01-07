@@ -37,7 +37,7 @@ pytest==3.4.2
 pytest-cov==2.5.1
 pytest-runner==2.11.1
 pytz==2018.4
-PyYAML==3.12
+PyYAML>=4.2b1
 readme-renderer==21.0
 requests==2.20.1
 requests-toolbelt==0.8.0
