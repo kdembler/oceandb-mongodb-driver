@@ -24,8 +24,6 @@ for line in sys.stdin:
 endef
 export PRINT_HELP_PYSCRIPT
 
-BROWSER := python -c "$$BROWSER_PYSCRIPT"
-
 help:
 	@python -c "$$PRINT_HELP_PYSCRIPT" < $(MAKEFILE_LIST)
 
@@ -35,6 +33,9 @@ clean-build: ## remove build artifacts
 	rm -fr build/
 	rm -fr dist/
 	rm -fr .eggs/
+	rm -fr *.log
+	rm -fr coverage.xml
+	rm -fr .python-version
 	find . -name '*.egg-info' -exec rm -fr {} +
 	find . -name '*.egg' -exec rm -f {} +
 
@@ -50,31 +51,26 @@ clean-test: ## remove test and coverage artifacts
 	rm -fr htmlcov/
 	rm -fr .pytest_cache
 
-lint: ## check style with flake8
-	flake8 oceandb-mongo-driver tests
+lint: ## check style with PyLint
+	pylint --errors-only oceandb_mongodb_driver tests
 
 test: ## run tests quickly with the default Python
+	export CONFIG_PATH=tests/oceandb.ini
 	py.test
 
 test-all: ## run tests on every Python version with tox
 	tox
 
 coverage: ## check code coverage quickly with the default Python
-	coverage run --source oceandb-mongo-driver -m pytest
+	coverage run --source oceandb_mongodb_driver -m pytest
 	coverage report -m
 	coverage html
 	$(BROWSER) htmlcov/index.html
 
 docs: ## generate Sphinx HTML documentation, including API docs
-	rm -f docs/oceandb-mongo-driver.rst
-	rm -f docs/modules.rst
-	sphinx-apidoc -o docs/ oceandb-mongo-driver
 	$(MAKE) -C docs clean
 	$(MAKE) -C docs html
-	$(BROWSER) docs/_build/html/index.html
-
-servedocs: docs ## compile the docs watching for changes
-	watchmedo shell-command -p '*.rst' -c '$(MAKE) -C docs html' -R -D .
+	google-chrome docs/build/html/index.html
 
 release: dist ## package and upload a release
 	twine upload dist/*
