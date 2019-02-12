@@ -1,8 +1,11 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
+from datetime import datetime, timedelta
 
+import pytest
 from oceandb_driver_interface.oceandb import OceanDb
-from oceandb_driver_interface.search_model import QueryModel, FullTextModel
+from oceandb_driver_interface.search_model import FullTextModel, QueryModel
+
+from oceandb_mongodb_driver.utils import query_parser
+from .ddo_example import ddo_sample
 
 mongo = OceanDb('./tests/oceandb.ini').plugin
 
@@ -39,10 +42,26 @@ def test_plugin_list():
 
 
 def test_plugin_query():
-    mongo.write({'example': 'mongo'}, 1)
-    search_model = QueryModel({'example': 'mongo'}, {'example': -1})
-    assert mongo.query(search_model)[0]['example'] == 'mongo'
-    mongo.delete(1)
+    mongo.write(ddo_sample, ddo_sample['id'])
+    search_model = QueryModel({'price': [0, 12]})
+    assert mongo.query(search_model)[0][
+               'id'] == 'did:op:cb36cf78d87f4ce4a784f17c2a4a694f19f3fbf05b814ac6b0b7197163888865'
+    search_model_2 = QueryModel({'price': [0, 12], 'license': ['CC-BY']})
+    assert mongo.query(search_model_2)[0][
+               'id'] == 'did:op:cb36cf78d87f4ce4a784f17c2a4a694f19f3fbf05b814ac6b0b7197163888865'
+    search_model_3 = QueryModel(
+        {'price': [0, 12], 'license': ['CC-BY'], 'type': ['Access', 'Metadata']})
+    assert mongo.query(search_model_3)[0][
+               'id'] == 'did:op:cb36cf78d87f4ce4a784f17c2a4a694f19f3fbf05b814ac6b0b7197163888865'
+    search_model_4 = QueryModel({'sample': []})
+    assert mongo.query(search_model_4)[0][
+               'id'] == 'did:op:cb36cf78d87f4ce4a784f17c2a4a694f19f3fbf05b814ac6b0b7197163888865'
+    search_model_5 = QueryModel({'created': ['today']})
+    assert mongo.query(search_model_5).retrieved == 0
+    search_model_6 = QueryModel({'created': []})
+    assert mongo.query(search_model_6)[0][
+               'id'] == 'did:op:cb36cf78d87f4ce4a784f17c2a4a694f19f3fbf05b814ac6b0b7197163888865'
+    mongo.delete(ddo_sample['id'])
 
 
 def test_plugin_query_text():
@@ -60,3 +79,36 @@ def test_plugin_query_text():
     mongo.delete(2)
     mongo.delete(3)
     mongo.delete(4)
+
+
+def test_query_parser():
+    query = {'price': [0, 10]}
+    assert query_parser(query) == {"service.metadata.base.price": {"$gt": 0, "$lt": 10}}
+    query = {'price': [15]}
+    assert query_parser(query) == {"service.metadata.base.price": {"$gt": 0, "$lt": 15}}
+    query = {'type': ['Access', 'Metadata']}
+    assert query_parser(query) == {
+        "$and": [{"service.type": "Access"}, {"service.type": "Metadata"}]}
+    query = {'license': []}
+    assert query_parser(query) == {}
+    query = {'license': [], 'type': ['Access', 'Metadata']}
+    assert query_parser(query) == {
+        "$and": [{"service.type": "Access"}, {"service.type": "Metadata"}]}
+    query = {'license': ['CC-BY'], 'type': ['Access', 'Metadata']}
+    assert query_parser(query) == {"$and": [{"service.metadata.base.license": "CC-BY"},
+                                            {"service.type": "Access"},
+                                            {"service.type": "Metadata"}]}
+    query = {'created': ['today', 'lastWeek', 'lastMonth', 'lastYear']}
+    assert query_parser(query)['created']['$gt'].year == (datetime.now() - timedelta(days=365)).year
+    query = {'created': ['no_valid']}
+    assert query_parser(query)['created']['$gt'].year == (
+            datetime.now() - timedelta(weeks=1000)).year
+    query = {'categories': ['weather', 'other']}
+    assert query_parser(query) == {"$or": [{"service.metadata.base.categories": "weather"},
+                                           {"service.metadata.base.categories": "other"}]}
+
+
+def test_query_not_supported():
+    query = {'not_supported': []}
+    with pytest.raises(Exception):
+        query_parser(query)
