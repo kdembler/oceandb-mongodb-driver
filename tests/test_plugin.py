@@ -95,7 +95,7 @@ def test_query_parser():
     assert query_parser(query) == {
         "$and": [{"service.type": "Access"}, {"service.type": "Metadata"}]}
     query = {'license': ['CC-BY'], 'type': ['Access', 'Metadata']}
-    assert query_parser(query) == {"$and": [{"service.metadata.base.license": "CC-BY"},
+    assert query_parser(query) == {"$or":[{"service.metadata.base.license": "CC-BY"}],"$and": [
                                             {"service.type": "Access"},
                                             {"service.type": "Metadata"}]}
     query = {'created': ['today', 'lastWeek', 'lastMonth', 'lastYear']}
