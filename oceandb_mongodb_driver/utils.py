@@ -10,6 +10,7 @@ OR = "$or"
 GT = "$gt"
 LT = "$lt"
 
+
 def query_parser(query):
     query_result = {}
     for key in query.items():

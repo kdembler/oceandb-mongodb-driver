@@ -95,14 +95,14 @@ def test_query_parser():
     assert query_parser(query) == {
         "$and": [{"service.type": "Access"}, {"service.type": "Metadata"}]}
     query = {'license': ['CC-BY'], 'type': ['Access', 'Metadata']}
-    assert query_parser(query) == {"$or":[{"service.metadata.base.license": "CC-BY"}],"$and": [
-                                            {"service.type": "Access"},
-                                            {"service.type": "Metadata"}]}
+    assert query_parser(query) == {"$or": [{"service.metadata.base.license": "CC-BY"}], "$and": [
+        {"service.type": "Access"},
+        {"service.type": "Metadata"}]}
     query = {'created': ['today', 'lastWeek', 'lastMonth', 'lastYear']}
     assert query_parser(query)['created']['$gt'].year == (datetime.now() - timedelta(days=365)).year
     query = {'created': ['no_valid']}
     assert query_parser(query)['created']['$gt'].year == (
-            datetime.now() - timedelta(weeks=1000)).year
+        datetime.now() - timedelta(weeks=1000)).year
     query = {'categories': ['weather', 'other']}
     assert query_parser(query) == {"$or": [{"service.metadata.base.categories": "weather"},
                                            {"service.metadata.base.categories": "other"}]}
