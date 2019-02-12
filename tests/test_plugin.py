@@ -44,23 +44,18 @@ def test_plugin_list():
 def test_plugin_query():
     mongo.write(ddo_sample, ddo_sample['id'])
     search_model = QueryModel({'price': [0, 12]})
-    assert mongo.query(search_model)[0][
-               'id'] == 'did:op:cb36cf78d87f4ce4a784f17c2a4a694f19f3fbf05b814ac6b0b7197163888865'
+    assert mongo.query(search_model)[0]['id'] == ddo_sample['id']
     search_model_2 = QueryModel({'price': [0, 12], 'license': ['CC-BY']})
-    assert mongo.query(search_model_2)[0][
-               'id'] == 'did:op:cb36cf78d87f4ce4a784f17c2a4a694f19f3fbf05b814ac6b0b7197163888865'
+    assert mongo.query(search_model_2)[0]['id'] == ddo_sample['id']
     search_model_3 = QueryModel(
         {'price': [0, 12], 'license': ['CC-BY'], 'type': ['Access', 'Metadata']})
-    assert mongo.query(search_model_3)[0][
-               'id'] == 'did:op:cb36cf78d87f4ce4a784f17c2a4a694f19f3fbf05b814ac6b0b7197163888865'
+    assert mongo.query(search_model_3)[0]['id'] == ddo_sample['id']
     search_model_4 = QueryModel({'sample': []})
-    assert mongo.query(search_model_4)[0][
-               'id'] == 'did:op:cb36cf78d87f4ce4a784f17c2a4a694f19f3fbf05b814ac6b0b7197163888865'
+    assert mongo.query(search_model_4)[0]['id'] == ddo_sample['id']
     search_model_5 = QueryModel({'created': ['today']})
     assert mongo.query(search_model_5).retrieved == 0
     search_model_6 = QueryModel({'created': []})
-    assert mongo.query(search_model_6)[0][
-               'id'] == 'did:op:cb36cf78d87f4ce4a784f17c2a4a694f19f3fbf05b814ac6b0b7197163888865'
+    assert mongo.query(search_model_6)[0]['id'] == ddo_sample['id']
     mongo.delete(ddo_sample['id'])
 
 
