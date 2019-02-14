@@ -3,6 +3,8 @@ from ssl import CERT_NONE, CERT_REQUIRED
 from oceandb_driver_interface.utils import get_value
 from pymongo import MongoClient, TEXT
 
+from oceandb_mongodb_driver.indexes import list_indexes
+
 _DB_INSTANCE = None
 
 
@@ -54,6 +56,8 @@ class MongoInstance(object):
 
         self._collection = self._db[collection]
         self._collection.create_index([("$**", TEXT)])
+        for index in list_indexes:
+            self._collection.create_index(index)
 
     @property
     def instance(self):
