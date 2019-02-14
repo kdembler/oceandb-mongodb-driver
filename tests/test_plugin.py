@@ -107,3 +107,14 @@ def test_query_not_supported():
     query = {'not_supported': []}
     with pytest.raises(Exception):
         query_parser(query)
+
+def test_default_sort():
+    mongo.write(ddo_sample, ddo_sample['id'])
+    ddo_sample2 = ddo_sample.copy()
+    ddo_sample2['id'] = 'did:op:cb36cf78d87f4ce4a784f17c2a4a694f19f3fbf05b814ac6b0b7197163888864'
+    ddo_sample2['service'][2]['metadata']['curation']['rating'] = 0.99
+    mongo.write(ddo_sample2, ddo_sample2['id'])
+    search_model = QueryModel({'price': [0, 12]})
+    assert mongo.query(search_model)[0]['id'] == ddo_sample2['id']
+    mongo.delete(ddo_sample['id'])
+    mongo.delete(ddo_sample2['id'])

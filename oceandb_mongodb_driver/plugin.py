@@ -3,6 +3,7 @@ import logging
 
 from oceandb_driver_interface.plugin import AbstractPlugin
 from oceandb_driver_interface.search_model import FullTextModel, QueryModel
+from pymongo import DESCENDING
 
 from oceandb_mongodb_driver.instance import get_database_instance
 from oceandb_mongodb_driver.utils import query_parser
@@ -56,7 +57,8 @@ class Plugin(AbstractPlugin):
 
     def query(self, search_model: QueryModel):
         if search_model.sort is None:
-            return self.driver.instance.find(query_parser(search_model.query)).skip(
+            return self.driver.instance.find(query_parser(search_model.query)).sort(
+                [('service.metadata.curation.rating', DESCENDING)]).skip(
                 search_model.page * search_model.offset) \
                 .limit(search_model.offset)
         else:
@@ -67,8 +69,9 @@ class Plugin(AbstractPlugin):
 
     def text_query(self, full_text_model: FullTextModel):
         if full_text_model.sort is None:
-            return self.driver.instance.find({"$text": {"$search": full_text_model.text}}) \
-                .skip(full_text_model.page * full_text_model.offset) \
+            return self.driver.instance.find({"$text": {"$search": full_text_model.text}}).sort(
+                [('service.metadata.curation.rating', DESCENDING)]).skip(
+                full_text_model.page * full_text_model.offset) \
                 .limit(full_text_model.offset)
         else:
             return self.driver.instance.find({"$text": {"$search": full_text_model.text}}).sort(
