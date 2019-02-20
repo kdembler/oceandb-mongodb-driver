@@ -28,6 +28,8 @@ def query_parser(query):
             create_created_query(query, query_result)
         elif 'sample' in key:
             query_result[index.sample] = 'sample'
+        elif 'text' in key:
+            create_text_query(query['text'], query_result)
         else:
             logger.error('The key %s is not supported by OceanDB.' % key[0])
             raise Exception('The key %s is not supported by OceanDB.' % key[0])
@@ -72,4 +74,9 @@ def create_created_query(query, query_result):
         else:
             logger.info('The key %s is not supported in the created query' % values)
     query_result['created'] = {GT: now}
+    return query_result
+
+
+def create_text_query(query, query_result):
+    query_result['$text'] = {"$search": query[0]}
     return query_result
