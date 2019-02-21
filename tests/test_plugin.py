@@ -56,6 +56,10 @@ def test_plugin_query():
     assert mongo.query(search_model_5).retrieved == 0
     search_model_6 = QueryModel({'created': []})
     assert mongo.query(search_model_6)[0]['id'] == ddo_sample['id']
+    search_model_7 = QueryModel({'text': ['weather']})
+    assert mongo.query(search_model_7)[0]['id'] == ddo_sample['id']
+    search_model_8 = QueryModel({'text': ['weather'], 'price': [0, 12]})
+    assert mongo.query(search_model_8)[0]['id'] == ddo_sample['id']
     mongo.delete(ddo_sample['id'])
 
 
@@ -101,12 +105,15 @@ def test_query_parser():
     query = {'categories': ['weather', 'other']}
     assert query_parser(query) == {"$or": [{"service.metadata.base.categories": "weather"},
                                            {"service.metadata.base.categories": "other"}]}
+    query = {'text': ['weather']}
+    assert query_parser(query) == {"$text": {"$search": "weather"}}
 
 
 def test_query_not_supported():
     query = {'not_supported': []}
     with pytest.raises(Exception):
         query_parser(query)
+
 
 def test_default_sort():
     mongo.write(ddo_sample, ddo_sample['id'])
