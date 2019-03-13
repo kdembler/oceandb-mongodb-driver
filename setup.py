@@ -3,6 +3,9 @@
 
 """The setup script."""
 
+#  Copyright 2018 Ocean Protocol Foundation
+#  SPDX-License-Identifier: Apache-2.0
+
 from setuptools import setup, find_packages
 
 with open('README.md', encoding='utf-8') as readme_file:
