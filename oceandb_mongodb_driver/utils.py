@@ -40,7 +40,7 @@ def query_parser(query):
 
 
 def create_query(value, index, query, operator):
-    for i in enumerate(value):
+    for i, _ in enumerate(value):
         if i == 0:
             if operator in query:
                 query[operator] += [{index: value[i]}]
