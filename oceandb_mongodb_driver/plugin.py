@@ -1,7 +1,18 @@
 """Implementation of OceanDB plugin based in MongoDB"""
-from oceandb_driver_interface.plugin import AbstractPlugin
-from oceandb_mongodb_driver.instance import get_database_instance
+#  Copyright 2018 Ocean Protocol Foundation
+#  SPDX-License-Identifier: Apache-2.0
+
 import logging
+
+from oceandb_driver_interface.plugin import AbstractPlugin
+from oceandb_driver_interface.search_model import FullTextModel, QueryModel
+from pymongo import DESCENDING
+
+from oceandb_mongodb_driver.instance import get_database_instance
+from oceandb_mongodb_driver.utils import query_parser
+
+logger = logging.getLogger(__name__)
+
 
 class Plugin(AbstractPlugin):
     """Mongo ledger plugin for `Ocean DB's Python reference
@@ -44,8 +55,29 @@ class Plugin(AbstractPlugin):
         self.logger.debug('mongo::delete::{}'.format(resource_id))
         return self.driver.instance.delete_one({"_id": resource_id})
 
-    def list(self, search_from=None, search_to=None, offset=None, limit=None):
-        return self.driver.instance.find()
+    def list(self, search_from=None, search_to=None, limit=0):
+        return self.driver.instance.find().limit(limit)
 
-    def query(self, query_string):
-        return self.driver.instance.find(query_string)
+    def query(self, search_model: QueryModel):
+        if search_model.sort is None:
+            return self.driver.instance.find(query_parser(search_model.query)).sort(
+                [('service.metadata.curation.rating', DESCENDING)]).skip(
+                search_model.page * search_model.offset) \
+                .limit(search_model.offset)
+        else:
+            return self.driver.instance.find(query_parser(search_model.query)).sort(
+                list(search_model.sort.items())).skip(
+                search_model.page * search_model.offset) \
+                .limit(search_model.offset)
+
+    def text_query(self, full_text_model: FullTextModel):
+        if full_text_model.sort is None:
+            return self.driver.instance.find({"$text": {"$search": full_text_model.text}}).sort(
+                [('service.metadata.curation.rating', DESCENDING)]).skip(
+                full_text_model.page * full_text_model.offset) \
+                .limit(full_text_model.offset)
+        else:
+            return self.driver.instance.find({"$text": {"$search": full_text_model.text}}).sort(
+                list(full_text_model.sort.items())).skip(
+                full_text_model.page * full_text_model.offset) \
+                .limit(full_text_model.offset)
