@@ -10,8 +10,8 @@ logger = logging.getLogger(__name__)
 
 AND = "$and"
 OR = "$or"
-GT = "$gt"
-LT = "$lt"
+GT = "$gte"
+LT = "$lte"
 
 
 def query_parser(query):
