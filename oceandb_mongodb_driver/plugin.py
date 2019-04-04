@@ -75,8 +75,8 @@ class Plugin(AbstractPlugin):
     def text_query(self, full_text_model: FullTextModel):
         if full_text_model.sort is None:
             query_result = self.driver.instance.find(
-                {"$text": {"$search": full_text_model.text},
-                 "score": {"$meta": "textScore"}}).project({"score": {"$meta": "textScore"}})
+                {"$text": {"$search": full_text_model.text}},
+                {"score": {"$meta": "textScore"}})
             return (query_result.sort(
                 [('score', {'$meta': 'textScore'}),
                  ('service.metadata.curation.rating', DESCENDING)]).skip(

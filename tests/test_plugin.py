@@ -74,6 +74,7 @@ def test_plugin_query_text():
     search_model = FullTextModel('test', {'key': -1}, offset=3, page=0)
     search_model1 = FullTextModel('test', {'key': -1}, offset=3, page=1)
     assert mongo.text_query(search_model)[0].count(with_limit_and_skip=True) == 3
+    assert mongo.text_query(FullTextModel('test'))[0].count(with_limit_and_skip=True) == 4
     assert mongo.text_query(search_model)[0][0]['key'] == 'D'
     assert mongo.text_query(search_model)[0][1]['key'] == 'C'
     assert mongo.text_query(search_model1)[0][0]['key'] == 'A'
