@@ -60,24 +60,32 @@ class Plugin(AbstractPlugin):
 
     def query(self, search_model: QueryModel):
         if search_model.sort is None:
-            return self.driver.instance.find(query_parser(search_model.query)).sort(
+            query_result = self.driver.instance.find(query_parser(search_model.query))
+            return (query_result.sort(
                 [('service.metadata.curation.rating', DESCENDING)]).skip(
                 search_model.page * search_model.offset) \
-                .limit(search_model.offset)
+                .limit(search_model.offset), query_result.count())
         else:
-            return self.driver.instance.find(query_parser(search_model.query)).sort(
+            query_result = self.driver.instance.find(query_parser(search_model.query))
+            return (query_result.sort(
                 list(search_model.sort.items())).skip(
                 search_model.page * search_model.offset) \
-                .limit(search_model.offset)
+                .limit(search_model.offset), query_result.count())
 
     def text_query(self, full_text_model: FullTextModel):
         if full_text_model.sort is None:
-            return self.driver.instance.find({"$text": {"$search": full_text_model.text}}).sort(
-                [('service.metadata.curation.rating', DESCENDING)]).skip(
-                full_text_model.page * full_text_model.offset) \
-                .limit(full_text_model.offset)
+            query_result = self.driver.instance.find(
+                {"$text": {"$search": full_text_model.text},
+                 "score": {"$meta": "textScore"}}).project({"score": {"$meta": "textScore"}})
+            return (query_result.sort(
+                [('score', {'$meta': 'textScore'}),
+                 ('service.metadata.curation.rating', DESCENDING)]).skip(
+                full_text_model.page * full_text_model.offset)
+                    .limit(full_text_model.offset), query_result.count())
         else:
-            return self.driver.instance.find({"$text": {"$search": full_text_model.text}}).sort(
+            query_result = self.driver.instance.find(
+                {"$text": {"$search": full_text_model.text}})
+            return (query_result.sort(
                 list(full_text_model.sort.items())).skip(
-                full_text_model.page * full_text_model.offset) \
-                .limit(full_text_model.offset)
+                full_text_model.page * full_text_model.offset)
+                    .limit(full_text_model.offset), query_result.count())
