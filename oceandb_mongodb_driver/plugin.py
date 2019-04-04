@@ -74,14 +74,18 @@ class Plugin(AbstractPlugin):
 
     def text_query(self, full_text_model: FullTextModel):
         if full_text_model.sort is None:
-            query_result = self.driver.instance.find({"$text": {"$search": full_text_model.text}})
+            query_result = self.driver.instance.find(
+                {"$text": {"$search": full_text_model.text},
+                 "score": {"$meta": "textScore"}}).project({"score": {"$meta": "textScore"}})
             return (query_result.sort(
-                [('service.metadata.curation.rating', DESCENDING)]).skip(
-                full_text_model.page * full_text_model.offset) \
-                .limit(full_text_model.offset), query_result.count())
+                [('score', {'$meta': 'textScore'}),
+                 ('service.metadata.curation.rating', DESCENDING)]).skip(
+                full_text_model.page * full_text_model.offset)
+                    .limit(full_text_model.offset), query_result.count())
         else:
-            query_result = self.driver.instance.find({"$text": {"$search": full_text_model.text}})
+            query_result = self.driver.instance.find(
+                {"$text": {"$search": full_text_model.text}})
             return (query_result.sort(
                 list(full_text_model.sort.items())).skip(
-                full_text_model.page * full_text_model.offset) \
-                .limit(full_text_model.offset), query_result.count())
+                full_text_model.page * full_text_model.offset)
+                    .limit(full_text_model.offset), query_result.count())
