@@ -81,7 +81,7 @@ def test_plugin_query_text():
     assert mongo.text_query(search_model1)[0][0]['key'] == 'A'
 
     for i in range(5, total+1):
-        value = f'test {i}'
+        value = 'test %s' % i
         mongo.write({'key': str(i), 'value': value}, i)
 
     offset = 4
