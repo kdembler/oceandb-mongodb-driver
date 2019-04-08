@@ -36,6 +36,10 @@ class Plugin(AbstractPlugin):
         """str: the type of this plugin (``'MongoDB'``)"""
         return 'MongoDB'
 
+    @staticmethod
+    def _num_to_skip(page, num_per_page):
+        return (page - 1) * num_per_page
+
     def write(self, obj, resource_id=None):
         if resource_id is not None:
             obj['_id'] = resource_id
@@ -59,33 +63,40 @@ class Plugin(AbstractPlugin):
         return self.driver.instance.find().limit(limit)
 
     def query(self, search_model: QueryModel):
-        if search_model.sort is None:
-            query_result = self.driver.instance.find(query_parser(search_model.query))
-            return (query_result.sort(
-                [('service.metadata.curation.rating', DESCENDING)]).skip(
-                search_model.page * search_model.offset) \
-                .limit(search_model.offset), query_result.count())
-        else:
-            query_result = self.driver.instance.find(query_parser(search_model.query))
-            return (query_result.sort(
-                list(search_model.sort.items())).skip(
-                search_model.page * search_model.offset) \
-                .limit(search_model.offset), query_result.count())
+        assert search_model.page >= 1, 'page value %s is invalid' % search_model.page
+
+        query_result = self.driver.instance.find(query_parser(search_model.query))
+        sort_params = [('service.metadata.curation.rating', DESCENDING)]
+        if search_model.sort is not None:
+            sort_params = list(search_model.sort.items())
+
+        return (
+            query_result.sort(sort_params)
+            .skip(self._num_to_skip(search_model.page, search_model.offset))
+            .limit(search_model.offset),
+            query_result.count()
+        )
 
     def text_query(self, full_text_model: FullTextModel):
+        assert full_text_model.page >= 1, 'page value %s is invalid' % full_text_model.page
+
+        find_params = {"score": {"$meta": "textScore"}}
+
         if full_text_model.sort is None:
-            query_result = self.driver.instance.find(
-                {"$text": {"$search": full_text_model.text}},
-                {"score": {"$meta": "textScore"}})
-            return (query_result.sort(
-                [('score', {'$meta': 'textScore'}),
-                 ('service.metadata.curation.rating', DESCENDING)]).skip(
-                full_text_model.page * full_text_model.offset)
-                    .limit(full_text_model.offset), query_result.count())
+            sort_params = [
+                ('score', {'$meta': 'textScore'}),
+                ('service.metadata.curation.rating', DESCENDING)]
         else:
-            query_result = self.driver.instance.find(
-                {"$text": {"$search": full_text_model.text}})
-            return (query_result.sort(
-                list(full_text_model.sort.items())).skip(
-                full_text_model.page * full_text_model.offset)
-                    .limit(full_text_model.offset), query_result.count())
+            sort_params = list(full_text_model.sort.items())
+
+        query_result = self.driver.instance.find(
+            {"$text": {"$search": full_text_model.text}},
+            find_params
+        )
+
+        return (
+            query_result.sort(sort_params)
+            .skip(self._num_to_skip(full_text_model.page, full_text_model.offset))
+            .limit(full_text_model.offset),
+            query_result.count()
+        )

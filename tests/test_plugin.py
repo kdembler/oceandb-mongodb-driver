@@ -67,21 +67,35 @@ def test_plugin_query():
 
 
 def test_plugin_query_text():
+    total = 15
     mongo.write({'key': 'A', 'value': 'test first'}, 1)
     mongo.write({'key': 'B', 'value': 'test second'}, 2)
     mongo.write({'key': 'C', 'value': 'test third'}, 3)
     mongo.write({'key': 'D', 'value': 'test fourth'}, 4)
-    search_model = FullTextModel('test', {'key': -1}, offset=3, page=0)
-    search_model1 = FullTextModel('test', {'key': -1}, offset=3, page=1)
+    search_model = FullTextModel('test', {'key': -1}, offset=3, page=1)
+    search_model1 = FullTextModel('test', {'key': -1}, offset=3, page=2)
     assert mongo.text_query(search_model)[0].count(with_limit_and_skip=True) == 3
     assert mongo.text_query(FullTextModel('test'))[0].count(with_limit_and_skip=True) == 4
     assert mongo.text_query(search_model)[0][0]['key'] == 'D'
     assert mongo.text_query(search_model)[0][1]['key'] == 'C'
     assert mongo.text_query(search_model1)[0][0]['key'] == 'A'
-    mongo.delete(1)
-    mongo.delete(2)
-    mongo.delete(3)
-    mongo.delete(4)
+
+    for i in range(5, total+1):
+        value = 'test %s' % i
+        mongo.write({'key': str(i), 'value': value}, i)
+
+    offset = 4
+    for page in range(1, 4):  # page: 1, 2, 3
+        result = mongo.text_query(FullTextModel('test', offset=offset, page=page))
+        assert result[1] == total
+        assert result[0].count(with_limit_and_skip=True) == offset
+
+    result = mongo.text_query(FullTextModel('test', offset=offset, page=4))
+    assert result[0].count(with_limit_and_skip=True) == (total % offset)
+
+    # Clean up
+    for i in range(1, total):
+        mongo.delete(i)
 
 
 def test_query_parser():

@@ -2,7 +2,20 @@
 History
 =======
 
-0.1.5 (February 21st, 2019)
+0.1.9 (April 8th, 2019)
+-----------------------
+* Fix bug in search query pagination
+
+0.1.8 (April 5th, 2019)
+-----------------------
+* Fix issue with projections
+
+0.1.7 (April 4th, 2019)
+-----------------------
+* Give the result of the count in the search queries
+* Change $gt and $lt for $gte and $lte
+
+0.1.6 (February 21st, 2019)
 ---------------------------
 * Add support for text queries with the custom queries.
 
