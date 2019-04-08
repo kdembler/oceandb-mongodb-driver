@@ -63,7 +63,7 @@ class Plugin(AbstractPlugin):
         return self.driver.instance.find().limit(limit)
 
     def query(self, search_model: QueryModel):
-        assert search_model.page >= 1, f'page value {search_model.page} is invalid'
+        assert search_model.page >= 1, 'page value %s is invalid' % search_model.page
 
         query_result = self.driver.instance.find(query_parser(search_model.query))
         sort_params = [('service.metadata.curation.rating', DESCENDING)]
@@ -78,7 +78,7 @@ class Plugin(AbstractPlugin):
         )
 
     def text_query(self, full_text_model: FullTextModel):
-        assert full_text_model.page >= 1, f'page value {full_text_model.page} is invalid'
+        assert full_text_model.page >= 1, 'page value %s is invalid' % full_text_model.page
 
         find_params = {"score": {"$meta": "textScore"}}
 
