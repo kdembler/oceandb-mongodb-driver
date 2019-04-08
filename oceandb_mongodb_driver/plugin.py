@@ -80,13 +80,13 @@ class Plugin(AbstractPlugin):
     def text_query(self, full_text_model: FullTextModel):
         assert full_text_model.page >= 1, f'page value {full_text_model.page} is invalid'
 
+        find_params = {"score": {"$meta": "textScore"}}
+
         if full_text_model.sort is None:
-            find_params = {"score": {"$meta": "textScore"}}
             sort_params = [
                 ('score', {'$meta': 'textScore'}),
                 ('service.metadata.curation.rating', DESCENDING)]
         else:
-            find_params = {}
             sort_params = list(full_text_model.sort.items())
 
         query_result = self.driver.instance.find(
