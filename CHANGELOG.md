@@ -2,6 +2,10 @@
 History
 =======
 
+0.1.10 (May 24th, 2019)
+-----------------------
+* Allow to search by tags.
+
 0.1.9 (April 8th, 2019)
 -----------------------
 * Fix bug in search query pagination
