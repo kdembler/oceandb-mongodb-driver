@@ -294,7 +294,7 @@ ddo_sample = {
                         }
                     ],
                     "inLanguage": "en",
-                    "tags": "weather, uk, 2011, temperature, humidity",
+                    "tags": ["weather", "uk", "2011", "temperature", "humidity"],
                     "price": 10
                 },
                 "curation": {

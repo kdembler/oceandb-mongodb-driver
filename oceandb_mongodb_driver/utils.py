@@ -23,6 +23,8 @@ def query_parser(query):
             create_query(query['license'], index.license, query_result, OR)
         elif 'categories' in key:
             create_query(query['categories'], index.categories, query_result, OR)
+        elif 'tags' in key:
+            create_query(query['tags'], index.tags, query_result, OR)
         elif 'type' in key:
             create_query(query['type'], index.service_type, query_result, AND)
         elif 'updateFrequency' in key:
