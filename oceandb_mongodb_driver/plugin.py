@@ -85,7 +85,7 @@ class Plugin(AbstractPlugin):
         if full_text_model.sort is None:
             sort_params = [
                 ('score', {'$meta': 'textScore'}),
-                ('service.metadata.curation.rating', DESCENDING)]
+                ('service.attributes.curation.rating', DESCENDING)]
         else:
             sort_params = list(full_text_model.sort.items())
 

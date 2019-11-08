@@ -51,7 +51,7 @@ def test_plugin_query():
     search_model_2 = QueryModel({'price': [0, 12], 'license': ['CC-BY']})
     assert mongo.query(search_model_2)[0][0]['id'] == ddo_sample['id']
     search_model_3 = QueryModel(
-        {'price': [0, 12], 'license': ['CC-BY'], 'type': ['Access', 'Metadata']})
+        {'price': [0, 12], 'license': ['CC-BY'], 'type': ['access', 'metadata']})
     assert mongo.query(search_model_3)[0][0]['id'] == ddo_sample['id']
     search_model_4 = QueryModel({'sample': []})
     assert mongo.query(search_model_4)[0][0]['id'] == ddo_sample['id']
@@ -100,29 +100,29 @@ def test_plugin_query_text():
 
 def test_query_parser():
     query = {'price': [0, 10]}
-    assert query_parser(query) == {"service.metadata.base.price": {"$gte": 0, "$lte": 10}}
+    assert query_parser(query) == {"service.attributes.main.price": {"$gte": 0, "$lte": 10}}
     query = {'price': [15]}
-    assert query_parser(query) == {"service.metadata.base.price": {"$gte": 0, "$lte": 15}}
-    query = {'type': ['Access', 'Metadata']}
+    assert query_parser(query) == {"service.attributes.main.price": {"$gte": 0, "$lte": 15}}
+    query = {'type': ['access', 'metadata']}
     assert query_parser(query) == {
-        "$and": [{"service.type": "Access"}, {"service.type": "Metadata"}]}
+        "$and": [{"service.type": "access"}, {"service.type": "metadata"}]}
     query = {'license': []}
     assert query_parser(query) == {}
-    query = {'license': [], 'type': ['Access', 'Metadata']}
+    query = {'license': [], 'type': ['access', 'metadata']}
     assert query_parser(query) == {
-        "$and": [{"service.type": "Access"}, {"service.type": "Metadata"}]}
-    query = {'license': ['CC-BY'], 'type': ['Access', 'Metadata']}
-    assert query_parser(query) == {"$or": [{"service.metadata.base.license": "CC-BY"}], "$and": [
-        {"service.type": "Access"},
-        {"service.type": "Metadata"}]}
+        "$and": [{"service.type": "access"}, {"service.type": "metadata"}]}
+    query = {'license': ['CC-BY'], 'type': ['access', 'metadata']}
+    assert query_parser(query) == {"$or": [{"service.attributes.main.license": "CC-BY"}], "$and": [
+        {"service.type": "access"},
+        {"service.type": "metadata"}]}
     query = {'created': ['today', 'lastWeek', 'lastMonth', 'lastYear']}
     assert query_parser(query)['created']['$gte'].year == (datetime.now() - timedelta(days=365)).year
     query = {'created': ['no_valid']}
     assert query_parser(query)['created']['$gte'].year == (
         datetime.now() - timedelta(weeks=1000)).year
     query = {'categories': ['weather', 'other']}
-    assert query_parser(query) == {"$or": [{"service.metadata.base.categories": "weather"},
-                                           {"service.metadata.base.categories": "other"}]}
+    assert query_parser(query) == {"$or": [{"service.attributes.additionalInformation.categories": "weather"},
+                                           {"service.attributes.additionalInformation.categories": "other"}]}
     query = {'text': ['weather']}
     assert query_parser(query) == {"$text": {"$search": "weather"}}
 
@@ -137,7 +137,7 @@ def test_default_sort():
     mongo.write(ddo_sample, ddo_sample['id'])
     ddo_sample2 = ddo_sample.copy()
     ddo_sample2['id'] = 'did:op:cb36cf78d87f4ce4a784f17c2a4a694f19f3fbf05b814ac6b0b7197163888864'
-    ddo_sample2['service'][2]['metadata']['curation']['rating'] = 0.99
+    ddo_sample2['service'][2]['attributes']['curation']['rating'] = 0.99
     mongo.write(ddo_sample2, ddo_sample2['id'])
     search_model = QueryModel({'price': [0, 12]})
     assert mongo.query(search_model)[0][0]['id'] == ddo_sample2['id']
