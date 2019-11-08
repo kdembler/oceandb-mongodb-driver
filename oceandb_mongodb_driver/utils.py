@@ -20,7 +20,7 @@ def query_parser(query):
         if 'price' in key:
             create_price_query(query, query_result)
         elif 'license' in key:
-            create_query(query['license'], index.license, query_result, OR)
+            create_query(query['license'], index.service_license, query_result, OR)
         elif 'categories' in key:
             create_query(query['categories'], index.categories, query_result, OR)
         elif 'tags' in key:
