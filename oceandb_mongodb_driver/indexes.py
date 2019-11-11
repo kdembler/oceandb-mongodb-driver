@@ -1,13 +1,18 @@
 #  Copyright 2018 Ocean Protocol Foundation
 #  SPDX-License-Identifier: Apache-2.0
 
-price = "service.metadata.base.price"
-license = "service.metadata.base.license"
-sample = "service.metadata.base.links.type"
-categories = "service.metadata.base.categories"
-tags = "service.metadata.base.tags"
+
+price = "service.attributes.main.price"
+service_license = "service.attributes.main.license"
+sample = "service.attributes.additionalInformation.links.type"
+categories = "service.attributes.additionalInformation.categories"
+tags = "service.attributes.additionalInformation.tags"
 created = "created"
-updated_frequency = "service.metadata.additionalInformation.updateFrequency"
+datePublished = "service.attributes.main.datePublished"
+dateCreated = "service.attributes.main.dateCreated"
+updated_frequency = "service.attributes.additionalInformation.updateFrequency"
+metadata_type = "service.attributes.main.type"
 service_type = "service.type"
 
-list_indexes = [price, license, sample, categories, tags, created, updated_frequency, service_type]
+list_indexes = [price, service_license, sample, categories, tags,
+                created, updated_frequency, service_type, metadata_type]

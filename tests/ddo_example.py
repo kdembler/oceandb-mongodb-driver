@@ -47,12 +47,11 @@ ddo_sample = {
     },
     "service": [
         {
-            "type": "Access",
-            "purchaseEndpoint": "http://localhost:8030/api/v1/brizo/services/access/purchase?",
+            "type": "access",
             "serviceEndpoint": "http://localhost:8030/api/v1/brizo/services/consume?pubKey"
                                "=0x00bd138abd70e2f00903268f3db08f2d25677c9e&agreementId"
                                "=0xeb4bb084942044a3857a5d107b48563a1ab56608c79342319697710336484fca&url=0",
-            "serviceDefinitionId": "0",
+            "index": "0",
             "templateId": "0x044852b2a670ade5407e78fb2863c51de9fcb96542a07186fe3aeda6bb8a116d",
             "serviceAgreementContract": {
                 "contractName": "ServiceExecutionAgreement",
@@ -246,28 +245,23 @@ ddo_sample = {
             ]
         },
         {
-            "type": "Compute",
+            "type": "compute",
             "serviceEndpoint": "http://mybrizo.org/api/v1/brizo/services/compute?pubKey=${"
                                "pubKey}&agreementId={agreementId}&algo={algo}&container={container}"
         },
         {
-            "type": "Metadata",
+            "type": "metadata",
             "serviceEndpoint": "http://myaquarius.org/api/v1/provider/assets/metadata/{did}",
-            "metadata": {
-                "base": {
+            "attributes": {
+                "main": {
                     "name": "UK Weather information 2011",
                     "type": "dataset",
-                    "description": "Weather information of UK including temperature and humidity",
-                    "size": "3.1gb",
                     "dateCreated": datetime.strptime("2016-02-08T16:02:20Z", '%Y-%m-%dT%H:%M:%SZ'),
                     "author": "Met Office",
                     "license": "CC-BY",
-                    "copyrightHolder": "Met Office",
                     "encoding": "UTF-8",
                     "compression": "zip",
-                    "categories": ["weather", "meteorology"],
                     "contentType": "text/csv",
-                    "workExample": "423432fsd,51.509865,-0.118092,2011-01-01T10:55:11+00:00,7.2,68",
                     "files": [
                         {
                             "url": "https://testocnfiles.blob.core.windows.net/testfiles/testzkp"
@@ -275,6 +269,25 @@ ddo_sample = {
                             "checksum": "efb2c764274b745f5fc37f97c6b0e761",
                             "contentLength": "4535431",
                             "resourceId": "access-log2018-02-13-15-17-29-18386C502CAEA932"
+                        }
+                    ],
+                    "price": "10"
+                },
+                "curation": {
+                    "rating": 0.93,
+                    "numVotes": 123,
+                    "schema": "Binary Votting"
+                },
+                "additionalInformation": {
+                    "updateFrecuency": "yearly",
+                    "structuredMarkup": [
+                        {
+                            "uri": "http://skos.um.es/unescothes/C01194/jsonld",
+                            "mediaType": "application/ld+json"
+                        },
+                        {
+                            "uri": "http://skos.um.es/unescothes/C01194/turtle",
+                            "mediaType": "text/turtle"
                         }
                     ],
                     "links": [
@@ -295,25 +308,11 @@ ddo_sample = {
                     ],
                     "inLanguage": "en",
                     "tags": ["weather", "uk", "2011", "temperature", "humidity"],
-                    "price": 10
-                },
-                "curation": {
-                    "rating": 0.93,
-                    "numVotes": 123,
-                    "schema": "Binary Votting"
-                },
-                "additionalInformation": {
-                    "updateFrecuency": "yearly",
-                    "structuredMarkup": [
-                        {
-                            "uri": "http://skos.um.es/unescothes/C01194/jsonld",
-                            "mediaType": "application/ld+json"
-                        },
-                        {
-                            "uri": "http://skos.um.es/unescothes/C01194/turtle",
-                            "mediaType": "text/turtle"
-                        }
-                    ]
+                    "description": "Weather information of UK including temperature and humidity",
+                    "size": "3.1gb",
+                    "copyrightHolder": "Met Office",
+                    "categories": ["weather", "meteorology"],
+                    "workExample": "423432fsd,51.509865,-0.118092,2011-01-01T10:55:11+00:00,7.2,68"
                 }
             }
         }
