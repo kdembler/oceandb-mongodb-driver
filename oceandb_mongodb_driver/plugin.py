@@ -66,7 +66,7 @@ class Plugin(AbstractPlugin):
         assert search_model.page >= 1, 'page value %s is invalid' % search_model.page
 
         query_result = self.driver.instance.find(query_parser(search_model.query))
-        sort_params = [('service.metadata.curation.rating', DESCENDING)]
+        sort_params = [('service.attributes.curation.rating', DESCENDING)]
         if search_model.sort is not None:
             sort_params = list(search_model.sort.items())
 

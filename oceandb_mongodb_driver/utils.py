@@ -16,24 +16,29 @@ LT = "$lte"
 
 def query_parser(query):
     query_result = {}
-    for key in query.items():
-        if 'price' in key:
+    for key, value in query.items():
+        if 'price' == key:
             create_price_query(query, query_result)
-        elif 'license' in key:
+        elif 'license' == key:
             create_query(query['license'], index.service_license, query_result, OR)
-        elif 'categories' in key:
+        elif 'categories' == key:
             create_query(query['categories'], index.categories, query_result, OR)
-        elif 'tags' in key:
+        elif 'tags' == key:
             create_query(query['tags'], index.tags, query_result, OR)
-        elif 'type' in key:
+        elif 'service_type' == key:
+            create_query(query['service_type'], index.service_type, query_result, AND)
+        # Support older key for searching service type
+        elif 'type' == key:
             create_query(query['type'], index.service_type, query_result, AND)
-        elif 'updateFrequency' in key:
+        elif 'metadata_type' == key:
+            create_query(query['metadata_type'], index.metadata_type, query_result, AND)
+        elif 'updateFrequency' == key:
             create_query(query['updateFrequency'], index.updated_frequency, query_result, OR)
-        elif 'created' in key:
+        elif 'created' == key:
             create_created_query(query, query_result)
-        elif 'sample' in key:
+        elif 'sample' == key:
             query_result[index.sample] = 'sample'
-        elif 'text' in key:
+        elif 'text' == key:
             create_text_query(query['text'], query_result)
         else:
             logger.error('The key %s is not supported by OceanDB.' % key[0])
@@ -41,15 +46,12 @@ def query_parser(query):
     return query_result
 
 
-def create_query(value, index, query, operator):
-    for i, _ in enumerate(value):
-        if i == 0:
-            if operator in query:
-                query[operator] += [{index: value[i]}]
-            else:
-                query[operator] = [{index: value[i]}]
+def create_query(values, index_name, query, operator):
+    for i, value in enumerate(values):
+        if i == 0 and operator not in query:
+            query[operator] = [{index_name: value}]
         else:
-            query[operator] += [{index: value[i]}]
+            query[operator] += [{index_name: value}]
     return query
 
 
