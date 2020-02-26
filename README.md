@@ -54,13 +54,13 @@ In the configuration we are going to specify the following parameters to
     module.path=            # You can specify the location of your custom plugin.
     db.hostname=localhost   # Address of your MongoDB.
     db.port=27017           # Port of your Mongodb.
-    
+
     db.ssl=True             # If True, connections will be made using HTTPS, else using HTTP
     db.verify_certs=False   # If True, CA certificate will be verified
     db.ca_cert_path=        # If verifyCerts is True, then path to the CA cert should be provided here
     db.client_key=          # If db server needs client verification, then provide path to your client key
     db.client_cert_path=    # If db server needs client verification, then provide path to your client certificate
-   
+
     db.username=user        # If you are using authentication, mongodb username.
     db.password=password    # If you are using authentication, mongodb password.
     db.name=test            # Mongodb database name
@@ -81,9 +81,9 @@ Once you have defined this the only thing that you have to do it is use it:
 
 When you want to instantiate an Oceandb plugin you can provide the next environment variables:
 
-- **$CONFIG_PATH** 
-- **$MODULE** 
-- **$DB_HOSTNAME** 
+- **$CONFIG_PATH**
+- **$MODULE**
+- **$DB_HOSTNAME**
 - **$DB_PORT**
 - **$DB_NAME**
 - **$DB_COLLECTION**
@@ -93,71 +93,93 @@ When you want to instantiate an Oceandb plugin you can provide the next environm
 
 ## Queries
 
-Currently we are supporting a list of queries predefined in order to improve the search:
-All this queries present a common format: 
-```query:{"name":[args]}```
+You can query the DDO using predefined fields or provide the path to the desired fields yourself.
 
-This queries are the following:
+All queries use a common format:
+```json
+{
+  "query": {
+    "field": ["value1", "value2"]
+  }
+}
+```
+
+### Querying predefined fields
+
+Predefined fields include:
 - price
-    
+
     Could receive one or two parameters. If you only pass one assumes that your query is going to start from 0 to your value.
-        
+
     Next query:
     `query:{"price":[0,10]}`
-    
+
     It is transformed to:
     `{"service.metadata.base.price":{"$gt": 0, "$lt": 10}}`
-        
+
 - license
-    
-    It is going to retrieve all the documents with license that you are passing in the parameters, 
+
+    It is going to retrieve all the documents with license that you are passing in the parameters,
     if you do not pass any value retrieve all.
-        
+
     `{"license":["Public domain", "CC-YB"]}`
-    
+
 - type
-    
+
     It is going to check that the following service types are included in the ddo.
-    
+
     `{"type":["Access", "Metadata"]}`
 
 - sample
 
     Check that the metadata include a sample that contains a link of type sample. Do not take parameters.
-    
+
     `{"sample":[]}`
-    
+
 - categories
 
     Retrieve all the values that contain one of the specifies categories.
-    
+
     `{"categories":["weather", "meteorology"]}`
-    
+
 - created
 
-    Retrieve all the values that has been created after a specified date. 
+    Retrieve all the values that has been created after a specified date.
     The parameters available are 'today', 'lastWeek', 'lastMonth', 'lastYear'. If you pass more than one take the bigger interval.
     If you do not pass any parameter retrieve everything.
-    
+
     `{"created":["today"]}`
-    
+
 - updatedFrequency
 
     Retrieve all the values that contain one of the specifies updated frecuencies.
-    
+
     `{"updatedFrequency":["monthly"]}`
 
 - text
 
     Retrieve all the values that match with the text sent.
-    
+
     `{"text":["weather"]}`
+
+### Querying custom fields
+
+You can also query the DDO by value of any field. To do that, you will need to provide the full path inside the metadata instead of just the field name.
+
+For example:
+```json
+{
+  "query": {
+    "service.attributes.additionalInformation.customField": ["customValue1", "customValue2"]
+  }
+}
+```
 
 ## Code style
 
 The information about code style in python is documented in this two links [python-developer-guide](https://github.com/oceanprotocol/dev-ocean/blob/master/doc/development/python-developer-guide.md)
 and [python-style-guide](https://github.com/oceanprotocol/dev-ocean/blob/master/doc/development/python-style-guide.md).
-    
+
 ## Testing
 
 Automatic tests are setup via Travis, executing `tox`.
