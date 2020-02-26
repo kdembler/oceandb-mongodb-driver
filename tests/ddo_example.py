@@ -312,7 +312,8 @@ ddo_sample = {
                     "size": "3.1gb",
                     "copyrightHolder": "Met Office",
                     "categories": ["weather", "meteorology"],
-                    "workExample": "423432fsd,51.509865,-0.118092,2011-01-01T10:55:11+00:00,7.2,68"
+                    "workExample": "423432fsd,51.509865,-0.118092,2011-01-01T10:55:11+00:00,7.2,68",
+                    "customField": "customValue"
                 }
             }
         }

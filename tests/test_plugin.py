@@ -80,6 +80,12 @@ def test_plugin_query():
     search_model_8 = QueryModel({'text': ['weather'], 'price': ["0", "12"]})
     assert mongo.query(search_model_8)[0][0]['id'] == ddo_sample['id']
 
+    search_model_9 = QueryModel({'service.attributes.additionalInformation.customField': ['customValue']})
+    assert mongo.query(search_model_9)[0][0]['id'] == ddo_sample['id']
+
+    search_model_10 = QueryModel({'service.attributes.additionalInformation.nonExistentField': ['customValue']})
+    assert mongo.query(search_model_10)[0].retrieved == 0
+
     delete_all()
 
 
@@ -143,11 +149,8 @@ def test_query_parser():
     query = {'text': ['weather']}
     assert query_parser(query) == {"$text": {"$search": "weather"}}
 
-
-def test_query_not_supported():
-    query = {'not_supported': []}
-    with pytest.raises(Exception):
-        query_parser(query)
+    query = {'service.attributes.additionalInformation.customField': ['customValue']}
+    assert query_parser(query) == {"$or": [{"service.attributes.additionalInformation.customField": "customValue"}]}
 
 
 def test_default_sort():

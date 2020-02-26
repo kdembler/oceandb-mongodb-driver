@@ -41,8 +41,7 @@ def query_parser(query):
         elif 'text' == key:
             create_text_query(query['text'], query_result)
         else:
-            logger.error('The key %s is not supported by OceanDB.' % key[0])
-            raise Exception('The key %s is not supported by OceanDB.' % key[0])
+            create_query(value, key, query_result, OR)
     return query_result
 
 
